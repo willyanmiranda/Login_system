@@ -1,43 +1,36 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const app = express();
-require('dotenv').config();
 
-// Configurar a engine de template EJS
 app.set('view engine', 'ejs');
-
-// Configurar a pasta 'views' para os arquivos .ejs
 app.set('views', path.join(__dirname, 'public/html'));
 
-// Configurar a pasta 'public' para servir os arquivos estáticos (CSS)
 app.use(express.static(path.join(__dirname, 'public')));
-
-// Configurar o body-parser
 app.use(express.urlencoded({ extended: true }));
-
-// Configuração da sessão
+app.use(express.json());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }
+  cookie: { secure: false } 
 }));
 
-// Importar as rotas de autenticação
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/authRoutes');
+const dashboardRoutes = require('./routes/dashboardRoutes'); 
 app.use('/', authRoutes);
+app.use('/', dashboardRoutes); 
 
-// Rota principal
+
 app.get('/', (req, res) => {
   if (req.session.loggedin) {
-    res.redirect('/dashboard'); // Redireciona para o dashboard se estiver logado
+    res.redirect('/dashboard'); 
   } else {
-    res.redirect('/login'); // Caso contrário, redireciona para o login
+    res.redirect('/login'); 
   }
 });
 
-// Iniciar o servidor
 app.listen(3000, () => {
   console.log('Servidor rodando na porta 3000.');
 });
