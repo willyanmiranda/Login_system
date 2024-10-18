@@ -19,8 +19,10 @@ app.use(session({
 
 const authRoutes = require('./routes/authRoutes');
 const dashboardRoutes = require('./routes/dashboardRoutes'); 
+const webhookRoutes = require('./routes/webHookRoutes')
 app.use('/', authRoutes);
 app.use('/', dashboardRoutes); 
+app.use('/', webhookRoutes); 
 
 
 app.get('/', (req, res) => {
