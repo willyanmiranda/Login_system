@@ -11,7 +11,7 @@ exports.loginPage = (req, res) => {
 exports.authenticate = (req, res) => {
   const { username, password } = req.body;
 
-  const query = 'SELECT * FROM admins WHERE username = ?';
+  const query = 'SELECT * FROM users WHERE username = ?';
   db.query(query, [username], async (err, results) => {
     if (err) {
       console.error('Erro ao executar a query:', err);
@@ -30,7 +30,7 @@ exports.authenticate = (req, res) => {
 };
 
 exports.register = async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password, role } = req.body;
 
   if (!username || !password) {
     return res.status(400).send('Por favor, preencha todos os campos.');
@@ -38,8 +38,8 @@ exports.register = async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const query = 'INSERT INTO admins (username, password) VALUES (?, ?)';
-    db.query(query, [username, hashedPassword], (err, result) => {
+    const query = 'INSERT INTO users (username, password, role) VALUES (?, ?, ?)';
+    db.query(query, [username, hashedPassword, role], (err, result) => {
       if (err) {
         console.error('Erro ao inserir o usuário no banco de dados:', err);
         return res.status(500).send('Erro ao cadastrar o usuário.');
