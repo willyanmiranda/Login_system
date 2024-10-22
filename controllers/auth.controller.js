@@ -15,18 +15,15 @@ exports.authenticate = async (req, res) => {
     const user = await User.findOne({ where: { username } });
 
     if (user) {
-      // Comparar a senha inserida com o hash armazenado
       const match = await bcrypt.compare(password, user.password);
 
       if (match) {
-        // Configurar a sessão se o login for bem-sucedido
         req.session.loggedin = true;
         req.session.username = username;
         return res.redirect('/dashboard');
       }
     }
-
-    // Renderizar a página de login com mensagem de erro
+    
     res.render('login', { message: 'Usuário ou senha incorretos!' });
   } catch (err) {
     console.error('Erro ao autenticar o usuário:', err);
@@ -77,6 +74,6 @@ exports.logout = (req, res) => {
     if (err) {
       console.log(err);
     }
-    res.redirect('/login');
+    res.redirect('/user/login');
   });
 };

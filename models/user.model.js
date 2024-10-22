@@ -55,7 +55,7 @@ const User = sequelize.define('User', {
     defaultValue: 0,
   }
 }, {
-  timestamps: true, // Para garantir que createdAt e updatedAt estejam habilitados
+  timestamps: true, 
 });
 
 module.exports = User;

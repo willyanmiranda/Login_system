@@ -17,15 +17,18 @@ app.use(session({
 }));
 
 const authRoutes = require('./routes/authRoutes');
-const dashboardRoutes = require('./routes/dashboardRoutes'); 
-app.use('/', authRoutes);
-app.use('/', dashboardRoutes); 
+const dashboardRoutes = require('./routes/dashboardRoutes');
+const productRoutes = require('./routes/productRoutes');
+
+app.use('/api', authRoutes);
+app.use('/api', dashboardRoutes); 
+app.use('/api', productRoutes); 
 
 app.get('/', (req, res) => {
   if (req.session.loggedin) {
     res.redirect('/dashboard'); 
   } else {
-    res.redirect('/login'); 
+    res.redirect('/user/login'); 
   }
 });
 
