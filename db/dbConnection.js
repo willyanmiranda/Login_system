@@ -1,18 +1,31 @@
-const mysql = require('mysql2');
+const { Sequelize } = require('sequelize');
 
-const db = mysql.createConnection({
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
   host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME
+  dialect: 'mysql', 
+  logging: false, 
+  pool: {
+    max: 5,      
+    min: 0,       
+    acquire: 30000, 
+    idle: 10000,  
+  },
 });
 
-db.connect((err) => {
-  if (err) {
+sequelize.authenticate()
+  .then(() => {
+    console.log('Conectado ao banco de dados via Sequelize.');
+  })
+  .catch(err => {
     console.error('Erro ao conectar ao banco de dados:', err);
-  } else {
-    console.log('Conectado ao banco de dados.');
-  }
 });
 
-module.exports = db;
+sequelize.sync({ force: false })
+  .then(() => {
+    console.log('Tabelas sincronizadas com sucesso!');
+  })
+  .catch(err => {
+    console.error('Erro ao sincronizar tabelas:', err);
+});
+
+module.exports = sequelize;
