@@ -33,3 +33,49 @@ exports.register = async (req, res) => {
       res.status(500).send('Erro no servidor.');
     }
 };
+
+exports.getProductById = async (req, res) => {
+  try {
+    const product = await Product.findOne({ where: { id: req.params.id } });
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).send('Produto não encontrado.');
+    }
+  } catch (err) {
+    console.error('Erro ao buscar o produto:', err);
+    res.status(500).send('Erro no servidor.');
+  }
+};
+
+exports.getProducts = async (req, res) => {
+  try {
+    const products = await Product.findAll();
+    if (products) {
+      res.json(products);
+    } else {
+      res.status(404).send('Nenhum produto encontrado.');
+    }
+  } catch (err) {
+    console.error('Erro ao buscar os produtos:', err);
+    res.status(500).send('Erro no servidor.');
+  }
+};
+
+exports.getProductsByCategory = async (req, res) => {
+  try {
+    const products = await Product.findAll({
+      where: {
+        category_id: req.params.id,
+      },
+    });;
+    if (products) {
+      res.json(products);
+    } else {
+      res.status(404).send('Nenhum produto encontrado.');
+    }
+  } catch (err) {
+    console.error('Erro ao buscar os produtos:', err);
+    res.status(500).send('Erro no servidor.');
+  }
+};

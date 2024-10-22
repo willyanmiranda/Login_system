@@ -16,13 +16,15 @@ app.use(session({
   cookie: { secure: false } 
 }));
 
-const authRoutes = require('./routes/authRoutes');
-const dashboardRoutes = require('./routes/dashboardRoutes');
-const productRoutes = require('./routes/productRoutes');
+const authRoutes = require('./routes/auth.routes');
+const dashboardRoutes = require('./routes/dashboard.routes');
+const productRoutes = require('./routes/product.routes');
+const userRoutes = require('./routes/user.routes');
 
 app.use('/api', authRoutes);
 app.use('/api', dashboardRoutes); 
 app.use('/api', productRoutes); 
+app.use('/api', userRoutes); 
 
 app.get('/', (req, res) => {
   if (req.session.loggedin) {
