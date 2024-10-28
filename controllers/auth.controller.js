@@ -30,7 +30,7 @@ exports.register = async (req, res) => {
     social_login_provider
   } = req.body;
 
-  if (!username || !password || !email || !name) {
+  if (!username || !password || !email) {
     return res.status(400).send('Por favor, preencha os campos obrigatórios.');
   }
 
