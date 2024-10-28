@@ -1,13 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/user.model');
 
-exports.loginPage = (req, res) => {
-  if (req.session.loggedin) {
-    return res.redirect('/dashboard');
-  }
-  res.render('login');
-};
-
 exports.authenticate = async (req, res) => {
   const { username, password } = req.body;
 
@@ -20,11 +13,10 @@ exports.authenticate = async (req, res) => {
       if (match) {
         req.session.loggedin = true;
         req.session.username = username;
-        return res.redirect('/dashboard');
+        res.status(201).send('Login feito com sucesso!');
       }
     }
-    
-    res.render('login', { message: 'Usuário ou senha incorretos!' });
+    res.status(500).send('Usuário ou senha incorretos!');
   } catch (err) {
     console.error('Erro ao autenticar o usuário:', err);
     res.status(500).send('Erro no servidor');
@@ -74,6 +66,5 @@ exports.logout = (req, res) => {
     if (err) {
       console.log(err);
     }
-    res.redirect('/user/login');
   });
 };
